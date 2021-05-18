@@ -1,7 +1,10 @@
 import { defineComponent, ref, nextTick } from 'vue';
+import qs from 'qs';
 import ButtonRender, { ButtonRenderProps } from '../../components/button-render';
 import { BpmnStore } from '../../bpmn/store';
 import CodeMirror from 'codemirror';
+import { addDeploymentByString } from '@/api/data';
+
 import 'codemirror/mode/xml/xml.js';
 import 'codemirror/addon/hint/xml-hint.js';
 import 'codemirror/lib/codemirror.css';
@@ -9,6 +12,7 @@ import 'codemirror/theme/material.css';
 
 import './bpmn-actions.css';
 import { ModdleElement } from '../../bpmn/type';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
   name: 'BpmnActions',
@@ -50,7 +54,36 @@ export default defineComponent({
           label: '保存',
           icon: 'icon-baocun',
           action: () => {
-            console.log("点击保存")
+            console.log('点击保存');
+            bpmnContext
+              .getXML()
+              .then((response: { xml: string }) => {
+                var params = {
+                  stringBPMN: response.xml,
+                };
+                addDeploymentByString(qs.stringify(params)).then((response: any) => {
+                  console.log(response);
+                  debugger;
+                  if (response.code === 200) {
+                    ElMessage({
+                      message: '保存成功',
+                      type: 'success',
+                    });
+                  } else {
+                    alert(response.msg);
+                    ElMessage({
+                      message: response.msg,
+                      type: 'error',
+                    });
+                  }
+                });
+              })
+              .catch((err: unknown) => {
+                ElMessage({
+                  message: '保存失败' + err,
+                  type: 'error',
+                });
+              });
           },
         },
         {
