@@ -139,13 +139,13 @@ const PrefixLabelRule = defineComponent({
         {props.prefixTitle && <div class="prefix-title ">{props.prefixTitle}</div>}
         <ElInput readonly={true} placeholder="请选择" suffix-icon={props.suffixIcon || 'el-icon-s-tools'} v-model={data.computedModelValue} onClick={openDialog}></ElInput>
         <ElDialog title="设置规则" v-model={data.dialogVisible} width="50%">
-          <ElTabs tab-position="left" style="height:445px;padding:10px" v-model={data.tab}>
+          <ElTabs tab-position="left" style="height:245px;padding:10px" v-model={data.tab}>
             {ctx.attrs.bindKey === 'candidateUsers' ? (
               <>
                 <ElTabPane label="指定人员" name="USER">
                   <ElInput v-model={data.searchKey} placeholder="请输入筛选条件" v-slots={{append: (): JSX.Element => <ElButton onClick={queryUser} icon="el-icon-search"></ElButton>}}></ElInput>
                   {/* <ElInput type="text" placeholder="请输入筛选条件" v-slots={{suffix: (): JSX.Element => <i class="el-input__icon el-icon-search"></i>}}></ElInput> */}
-                  <div class="infinite-list" v-infinite-scroll={userListload} style="height:350px;overflow:auto">
+                  <div class="infinite-list" v-infinite-scroll={userListload} style="height:200px;overflow:auto">
                     <ElCheckboxGroup v-model={data.checkList.USER}>
                       {data.userDataList?.map((item: any) => {
                         return (

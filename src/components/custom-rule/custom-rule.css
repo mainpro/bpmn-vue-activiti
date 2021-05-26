@@ -1,11 +1,12 @@
 .rule-box {
   border: 1px solid #e8e8e8;
-  padding: 2px;
+  padding-top: 10px;
+  padding-left: 10px;
 }
 .el-tag {
   min-width: 120px;
   position: relative;
-  margin-right: 10px;
+  margin: 0 10px 10px 0px;
 }
 .el-tag .el-icon-close {
   position: absolute;
@@ -19,6 +20,7 @@
   padding-bottom: 0;
   border: 0;
   min-width: 80px;
+  margin: 0 10px 10px 0px;
 }
 .button-new-tag:hover {
   border: 1px solid #e8e8e8;
@@ -29,4 +31,5 @@
 }
 .select-new-tag {
   width: 120px;
+  margin: 0 10px 10px 0px;
 }

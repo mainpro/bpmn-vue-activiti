@@ -63,6 +63,8 @@ const CustomRule = defineComponent({
     //删除某个规则节点
     const handleTagClose = (index) => {
       data.dynamicRules.splice(index, 1);
+      data.inputVisible = false;
+      data.checkData = '';
       // data.dynamicRules = data.dynamicRules.filter((item: any) => item.name != tag.name);
     };
     //加载下拉数据
@@ -142,6 +144,8 @@ const CustomRule = defineComponent({
             filter-method={filterMethod}
             onKeyup={handleInputConfirm}
             onClear={handleInputBlur}
+            no-match-text={'按Enter键或以常量输入'}
+            no-data-text={'按Enter键或以常量输入'}
           >
             {data.ruleShowData.map((item, index) => {
               return <ElOption key={item.key} label={item.name} value={item.value} onClick={() => handleSelectChange(item)}></ElOption>;
