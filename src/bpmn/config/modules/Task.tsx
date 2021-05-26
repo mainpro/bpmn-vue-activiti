@@ -1,22 +1,17 @@
-import {
-  CommonGroupProperties,
-  FormGroupProperties,
-  DocumentGroupProperties,
-  ExtensionGroupProperties,
-  getElementTypeListenerProperties,
-} from '../common';
-import { GroupProperties } from '../index';
+import {CommonGroupProperties, FormGroupProperties, DocumentGroupProperties, ExtensionGroupProperties, getElementTypeListenerProperties} from '../common';
+import {GroupProperties} from '../index';
 import PrefixLabelSelect from '../../../components/prefix-label-select';
-import { ElInput, ElOption } from 'element-plus';
-import { ModdleElement } from '../../type';
-import { BpmnStore } from '../../store';
+import PrefixLabelRule from '../../../components/prefix-label-rule';
+import {ElInput, ElOption} from 'element-plus';
+import {ModdleElement} from '../../type';
+import {BpmnStore} from '../../store';
 
 const TASK_EVENT_OPTIONS = [
-  { label: '创建', value: 'create' },
-  { label: '签收', value: 'assignment' },
-  { label: '完成', value: 'complete' },
-  { label: '删除', value: 'delete' },
-  { label: '全部', value: 'all' },
+  {label: '创建', value: 'create'},
+  {label: '签收', value: 'assignment'},
+  {label: '完成', value: 'complete'},
+  {label: '删除', value: 'delete'},
+  {label: '全部', value: 'all'},
 ];
 
 const TaskListenerProperties = getElementTypeListenerProperties({
@@ -25,9 +20,9 @@ const TaskListenerProperties = getElementTypeListenerProperties({
 });
 
 const USER_OPTIONS = [
-  { label: '张三', value: '1' },
-  { label: '李四', value: '2' },
-  { label: '王五', value: '3' },
+  {label: '张三', value: '1'},
+  {label: '李四', value: '2'},
+  {label: '王五', value: '3'},
 ];
 /**
  * 用户任务属性配置
@@ -52,18 +47,39 @@ export const BpmnUserGroupProperties: GroupProperties = {
     },
     /**
      * 候选人属性
+     * 多选需要自己写get和set,多选的格式数数组,xml保存之后变成了字符串如:1,2,3
+     */
+    // candidateUsers: {
+    //   component: PrefixLabelSelect,
+    //   prefixTitle: '候选人',
+    //   multiple: true,
+    //   vSlots: {
+    //     default: (): JSX.Element => {
+    //       return USER_OPTIONS.map((item) => {
+    //         return <ElOption {...item} />;
+    //       });
+    //     },
+    //   },
+    //   getValue(businessObject: ModdleElement): string {
+    //     return typeof businessObject?.candidateUsers === 'string'
+    //       ? businessObject?.candidateUsers.split(',')
+    //       : businessObject?.candidateUsers;
+    //   },
+    //   setValue(businessObject: ModdleElement, key: string, value: string): void {
+    //     const bpmnContext = BpmnStore;
+    //     bpmnContext.getModeling().updateProperties(bpmnContext.getShape(), {
+    //       candidateUsers: value,
+    //     });
+    //   },
+    // },
+    /**
+     * 候选人属性
+     * 改为弹窗选择规则,最终生成字符串保存,类似$(bill.creator.leader)
      */
     candidateUsers: {
-      component: PrefixLabelSelect,
+      component: PrefixLabelRule,
       prefixTitle: '候选人',
-      multiple: true,
-      vSlots: {
-        default: (): JSX.Element => {
-          return USER_OPTIONS.map((item) => {
-            return <ElOption {...item} />;
-          });
-        },
-      },
+      suffixIcon:'el-icon-user-solid'
     },
     /**
      * 循环基数
@@ -108,8 +124,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
     completionCondition: {
       component: ElInput,
 
-      placeholder:
-        '如：${nrOfCompletedInstances/nrOfInstances >= 0.25} 表示完成数大于等于4分1时任务完成',
+      placeholder: '如：${nrOfCompletedInstances/nrOfInstances >= 0.25} 表示完成数大于等于4分1时任务完成',
       vSlots: {
         prepend: (): JSX.Element => <div>完成条件</div>,
       },
@@ -139,10 +154,10 @@ export const BpmnUserGroupProperties: GroupProperties = {
 };
 
 const LOOP_OPTIONS = [
-  { label: '无', value: 'Null' },
-  { label: '并行多重事件', value: 'Parallel' },
-  { label: '时序多重事件', value: 'Sequential' },
-  { label: '循环事件', value: 'StandardLoop' },
+  {label: '无', value: 'Null'},
+  {label: '并行多重事件', value: 'Parallel'},
+  {label: '时序多重事件', value: 'Sequential'},
+  {label: '循环事件', value: 'StandardLoop'},
 ];
 /**
  * 任务的基本属性配置
@@ -187,13 +202,9 @@ const BaseTaskProperties = {
             BpmnStore.createElement('bpmn:StandardLoopCharacteristics', 'loopCharacteristics');
             break;
           default:
-            BpmnStore.createElement(
-              'bpmn:MultiInstanceLoopCharacteristics',
-              'loopCharacteristics',
-              {
-                isSequential: value === 'Sequential',
-              },
-            );
+            BpmnStore.createElement('bpmn:MultiInstanceLoopCharacteristics', 'loopCharacteristics', {
+              isSequential: value === 'Sequential',
+            });
         }
         return () => BpmnStore.refresh();
       },
@@ -201,26 +212,13 @@ const BaseTaskProperties = {
   },
 };
 
-const CommonGroupPropertiesArray = [
-  BaseTaskProperties,
-  FormGroupProperties,
-  TaskListenerProperties,
-  ExtensionGroupProperties,
-  DocumentGroupProperties,
-];
+const CommonGroupPropertiesArray = [BaseTaskProperties, FormGroupProperties, TaskListenerProperties, ExtensionGroupProperties, DocumentGroupProperties];
 
 export default {
   //普通任务
   'bpmn:Task': CommonGroupPropertiesArray,
   //用户任务
-  'bpmn:UserTask': [
-    BaseTaskProperties,
-    BpmnUserGroupProperties,
-    TaskListenerProperties,
-    FormGroupProperties,
-    ExtensionGroupProperties,
-    DocumentGroupProperties,
-  ],
+  'bpmn:UserTask': [BaseTaskProperties, BpmnUserGroupProperties, TaskListenerProperties, FormGroupProperties, ExtensionGroupProperties, DocumentGroupProperties],
   //接收任务
   'bpmn:ReceiveTask': CommonGroupPropertiesArray,
   //发送任务

@@ -63,7 +63,6 @@ export default defineComponent({
         };
         getDefinitionXML(params).then((response: any) => {
           console.log(response);
-          debugger;
           bpmnContext
             .importXML(response)
             .then((result: Array<string>) => {

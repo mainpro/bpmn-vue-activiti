@@ -14,7 +14,25 @@ export function addDeploymentByString(data) {
   return request({
     url: 'api/processDefinition/addDeploymentByString',
     method: 'post',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     data,
+  });
+}
+
+//查询用户列表
+export function getUsers(params) {
+  return request({
+    url: 'api/users',
+    method: 'get',
+    params: params,
+  });
+}
+
+//自定义规则
+export function getRuleResult(params) {
+  return request({
+    url: 'api/rule/getRuleResult',
+    method: 'post',
+    data: params,
   });
 }

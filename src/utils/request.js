@@ -1,7 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 // import qs from 'qs';
-import { ElNotification } from 'element-plus';
+import {ElNotification, ElLoading} from 'element-plus';
+
+let loadingInstance = null;
 
 // 创建axios实例
 const service = axios.create({
@@ -12,6 +14,10 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   (config) => {
+    if (!(config.url.includes('user') || config.url.includes('rule'))) {
+      loadingInstance = ElLoading.service({fullscreen: false, text: '加载中'});
+    }
+
     let token = Cookies.get('EL-ADMIN-TOEKN');
     if (token) {
       config.headers['Authorization'] = token; // 让每个请求携带自定义token 请根据实际情况自行修改
@@ -24,6 +30,7 @@ service.interceptors.request.use(
     return config;
   },
   (error) => {
+    loadingInstance?.close();
     Promise.reject(error);
   },
 );
@@ -31,14 +38,13 @@ service.interceptors.request.use(
 // response 拦截器
 service.interceptors.response.use(
   (response) => {
+    loadingInstance?.close();
     return response.data;
   },
   (error) => {
+    loadingInstance?.close();
     // 兼容blob下载出错json提示
-    if (
-      error.response.data instanceof Blob &&
-      error.response.data.type.toLowerCase().indexOf('json') !== -1
-    ) {
+    if (error.response.data instanceof Blob && error.response.data.type.toLowerCase().indexOf('json') !== -1) {
       const reader = new FileReader();
       reader.readAsText(error.response.data, 'utf-8');
       reader.onload = function (e) {
@@ -70,7 +76,7 @@ service.interceptors.response.use(
           //   location.reload();
           // });
         } else if (code === 403) {
-          router.push({ path: '/401' });
+          router.push({path: '/401'});
         } else {
           const errorMsg = error.response.data.message;
           if (errorMsg !== undefined) {

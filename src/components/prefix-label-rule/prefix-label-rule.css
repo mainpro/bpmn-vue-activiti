@@ -1,0 +1,60 @@
+.prefix-label-select-container {
+  display: inline-table;
+  width: 100%;
+}
+
+.prefix-title {
+  display: table-cell;
+  padding: 0 20px;
+  border: 1px solid #dcdfe6;
+  border-right: 0;
+  border-radius: 4px 0 0 4px;
+  color: #909399;
+  background-color: #f5f7fa;
+  width: 1px;
+  white-space: nowrap;
+}
+
+.prefix-label-select {
+  display: table-cell;
+}
+
+.prefix-label-select .el-input,
+.el-select {
+  line-height: normal;
+}
+
+.prefix-label-select .el-input__inner {
+  border-radius: 0 4px 4px 0 !important;
+  line-height: normal;
+}
+.el-dialog__header {
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e8e8e8;
+}
+.el-dialog__body {
+  padding: 0;
+}
+.dialog-footer {
+  padding: 10px;
+  text-align: right;
+  background-color: #f8f8f8;
+  border-top: 1px solid #e8e8e8;
+}
+.el-checkbox {
+  display: block;
+}
+.result-box {
+  padding: 0 20px 10px 20px;
+  background: #e8e8e8;
+}
+.result-box .result {
+  padding-top: 10px;
+}
+.result-box .result .tab {
+  display: inline-block;
+  width: 105px;
+}
+.result-box .result .el-tag {
+  margin-right: 10px;
+}

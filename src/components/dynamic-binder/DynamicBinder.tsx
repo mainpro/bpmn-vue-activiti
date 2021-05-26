@@ -1,6 +1,6 @@
-import { defineComponent, PropType, reactive, toRaw, watchEffect, watch } from 'vue';
-import ScriptHelper, { resolve } from '../../utils/script-helper';
-import { FieldDefine } from './index';
+import {defineComponent, PropType, reactive, toRaw, watchEffect, watch} from 'vue';
+import ScriptHelper, {resolve} from '../../utils/script-helper';
+import {FieldDefine} from './index';
 
 /**
  * 动态绑定组件
@@ -65,11 +65,7 @@ export default defineComponent({
                 //如果有setValue还是则直接使用独立的setValue
                 if (bindData.setValue) {
                   //setValue有返回值，值进行赋值后执行
-                  const setValueCallBack = bindData.setValue(
-                    toRaw(props.modelValue),
-                    bindData.bindKey,
-                    bindData.value,
-                  );
+                  const setValueCallBack = bindData.setValue(toRaw(props.modelValue), bindData.bindKey, bindData.value);
                   if (setValueCallBack) {
                     setValueCallBack();
                   }
@@ -79,14 +75,7 @@ export default defineComponent({
               },
             );
 
-            return (
-              <Component
-                {...bindData}
-                v-model={bindData.value}
-                v-slots={bindData.vSlots}
-                class={`${Component.name}-${key} dynamic-binder-item`}
-              />
-            );
+            return <Component {...bindData} v-model={bindData.value} v-slots={bindData.vSlots} class={`${Component.name}-${key} dynamic-binder-item`} />;
           }
           return null;
         })}
@@ -161,8 +150,6 @@ function defaultTransformer(sourceModel: unknown, bindKey: string, bindDefine: F
     bindKey,
     ...bindDefine,
     sourceModel,
-    value: bindDefine.getValue
-      ? bindDefine.getValue(toRaw(sourceModel))
-      : resolve(bindKey, sourceModel) || '',
+    value: bindDefine.getValue ? bindDefine.getValue(toRaw(sourceModel)) : resolve(bindKey, sourceModel) || '',
   });
 }

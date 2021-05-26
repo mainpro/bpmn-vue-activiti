@@ -63,11 +63,15 @@ export default defineComponent({
                 };
                 addDeploymentByString(qs.stringify(params)).then((response: any) => {
                   console.log(response);
-                  debugger;
                   if (response.code === 200) {
                     ElMessage({
                       message: '保存成功',
                       type: 'success',
+                      duration: 1000,
+                      onClose: () => {
+                        var info = { status: 'success' };
+                        window.parent.postMessage(info, '*');
+                      },
                     });
                   } else {
                     alert(response.msg);
