@@ -159,16 +159,16 @@ const PrefixLabelRule = defineComponent({
                 </ElTabPane>
                 <ElTabPane label="单据相关人员" name="BILL">
                   <ElCheckboxGroup v-model={data.checkList.BILL}>
-                    <ElCheckbox label="CREATOR" name="创建人" onChange={userCheck}>
+                    <ElCheckbox label="CREATOR" name="创建人" onChange={userCheck}>
                       创建人
                     </ElCheckbox>
                     <ElCheckbox label="ORDER_MANAGER" name="订单经理" onChange={userCheck}>
                       订单经理
                     </ElCheckbox>
-                    <ElCheckbox label="CREATOR.DIRECT_LEADER" name="创建人直线经理" onChange={userCheck}>
+                    <ElCheckbox label="CREATOR.DIRECT_LEADER" name="创建人直线经理" onChange={userCheck}>
                       创建人直线经理
                     </ElCheckbox>
-                    <ElCheckbox label="CREATOR.SECOND_LEADER" name="创建人二线经理" onChange={userCheck}>
+                    <ElCheckbox label="CREATOR.SECOND_LEADER" name="创建人二线经理" onChange={userCheck}>
                       创建人二线经理
                     </ElCheckbox>
                     <ElCheckbox label="ORDER_MANAGER.DIRECT_LEADER" name="订单经理直线经理" onChange={userCheck}>

@@ -1,9 +1,9 @@
-import { defineComponent, ref, nextTick } from 'vue';
+import {defineComponent, ref, nextTick} from 'vue';
 import qs from 'qs';
-import ButtonRender, { ButtonRenderProps } from '../../components/button-render';
-import { BpmnStore } from '../../bpmn/store';
+import ButtonRender, {ButtonRenderProps} from '../../components/button-render';
+import {BpmnStore} from '../../bpmn/store';
 import CodeMirror from 'codemirror';
-import { addDeploymentByString } from '@/api/data';
+import {addDeploymentByString} from '@/api/data';
 
 import 'codemirror/mode/xml/xml.js';
 import 'codemirror/addon/hint/xml-hint.js';
@@ -11,8 +11,8 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 
 import './bpmn-actions.css';
-import { ModdleElement } from '../../bpmn/type';
-import { ElMessage } from 'element-plus';
+import {ModdleElement} from '../../bpmn/type';
+import {ElMessage} from 'element-plus';
 
 export default defineComponent({
   name: 'BpmnActions',
@@ -57,7 +57,7 @@ export default defineComponent({
             console.log('点击保存');
             bpmnContext
               .getXML()
-              .then((response: { xml: string }) => {
+              .then((response: {xml: string}) => {
                 var params = {
                   stringBPMN: response.xml,
                 };
@@ -69,7 +69,7 @@ export default defineComponent({
                       type: 'success',
                       duration: 1000,
                       onClose: () => {
-                        var info = { status: 'success' };
+                        var info = {status: 'success'};
                         window.parent.postMessage(info, '*');
                       },
                     });
@@ -101,10 +101,7 @@ export default defineComponent({
           label: '导出SVG',
           icon: 'icon-zu920',
           action: () => {
-            const rootElement: ModdleElement = bpmnContext
-              .getModeler()
-              .get('canvas')
-              .getRootElement();
+            const rootElement: ModdleElement = bpmnContext.getModeler().get('canvas').getRootElement();
             bpmnContext
               .getSVG()
               .then((response) => {
@@ -119,13 +116,10 @@ export default defineComponent({
           label: '导出XML',
           icon: 'icon-zu1359',
           action: () => {
-            const rootElement: ModdleElement = bpmnContext
-              .getModeler()
-              .get('canvas')
-              .getRootElement();
+            const rootElement: ModdleElement = bpmnContext.getModeler().get('canvas').getRootElement();
             bpmnContext
               .getXML()
-              .then((response: { xml: string }) => {
+              .then((response: {xml: string}) => {
                 download(response.xml, rootElement.id || 'process', 'bpmn');
               })
               .catch((err: unknown) => {
@@ -170,17 +164,14 @@ export default defineComponent({
 
                 nextTick(() => {
                   if (!coder) {
-                    coder = CodeMirror.fromTextArea(
-                      document.getElementById('xml-highlight-container') as HTMLTextAreaElement,
-                      {
-                        lineWrapping: true,
-                        mode: 'application/xml', // HMTL混合模式
-                        theme: 'material',
-                        lineNumbers: true,
-                        lint: true,
-                        // theme: 'monokai', // 使用monokai模版
-                      },
-                    );
+                    coder = CodeMirror.fromTextArea(document.getElementById('xml-highlight-container') as HTMLTextAreaElement, {
+                      lineWrapping: true,
+                      mode: 'application/xml', // HMTL混合模式
+                      theme: 'material',
+                      lineNumbers: true,
+                      lint: true,
+                      // theme: 'monokai', // 使用monokai模版
+                    });
                     coder.setSize('100%', '100%');
                   } else {
                     coder.setValue(this.xml);
@@ -214,14 +205,7 @@ export default defineComponent({
         <el-drawer size="35%" direction="ltr" withHeader={false} v-model={this.previewActive}>
           <textarea id="xml-highlight-container" v-model={this.xml} />
         </el-drawer>
-        <input
-          type="file"
-          id="bpmn-upload-element"
-          ref="refFile"
-          style="display: none"
-          accept=".xml, .bpmn"
-          onChange={importFile}
-        />
+        <input type="file" id="bpmn-upload-element" ref="refFile" style="display: none" accept=".xml, .bpmn" onChange={importFile} />
       </div>
     );
   },
