@@ -17,7 +17,13 @@ function rawTransform(fileRegex: Array<RegExp>): {
   };
 }
 export default {
-  outDir: 'bpmnjs',
+  build: {
+    minify: false, // 是否进行压缩,boolean | 'terser' | 'esbuild',默认使用terser
+    manifest: false, // 是否产出maifest.json
+    sourcemap: false, // 是否产出soucemap.json
+    outDir: 'bpmnjs', // 产出目录
+  },
+  // outDir: 'bpmnjs',
   alias: {
     // 键必须以斜线开始和结束
     '@': path.resolve(__dirname, './src'),
