@@ -16,6 +16,7 @@ const TASK_EVENT_OPTIONS = [
 
 const TaskListenerProperties = getElementTypeListenerProperties({
   name: '任务监听器',
+  type:'activiti:TaskListener',
   eventOptions: TASK_EVENT_OPTIONS,
 });
 
@@ -204,6 +205,8 @@ const BaseTaskProperties = {
           default:
             BpmnStore.createElement('bpmn:MultiInstanceLoopCharacteristics', 'loopCharacteristics', {
               isSequential: value === 'Sequential',
+              'activiti:collection':"LIST"+new Date().getTime(),
+              'activiti:elementVariable':"assignee"
             });
         }
         return () => BpmnStore.refresh();

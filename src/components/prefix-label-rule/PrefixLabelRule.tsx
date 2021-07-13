@@ -3,7 +3,7 @@ import {defineComponent, PropType, computed, reactive, ref, onMounted} from 'vue
 import CustomRule from '@/components/custom-rule';
 import './prefix-label-rule.css';
 
-import {getUsers} from '@/api/data';
+import {getUsers,getGroup} from '@/api/data';
 
 const PrefixLabelRule = defineComponent({
   props: {
@@ -47,7 +47,15 @@ const PrefixLabelRule = defineComponent({
         sort: 'id,desc',
         blurry: '', //关键字放到这里
       },
-      userDataList: [],
+      userDataList: [],//用户数据
+      groupParams: {
+        //查询用户接口 参数
+        page: 0,
+        size: 10,
+        sort: 'id,desc',
+        blurry: '', //关键字放到这里
+      },
+      groupDataList:[],//群组数据
 
       tab: ctx.attrs.bindKey === 'candidateUsers' ? 'USER' : 'CUSTOM',
       checkList: reactive({
@@ -134,6 +142,35 @@ const PrefixLabelRule = defineComponent({
       console.log(rules);
       data.resultList['CUSTOM'] = rules;
     };
+   //读取组织数据
+   const groupListload = () => {
+      console.log('下拉加载');
+      if (data.searchKey) {
+        data.groupParams.blurry = data.searchKey;
+      } else {
+        data.groupParams.blurry = '';
+      }
+      getGroup(data.groupParams).then((response: any) => {
+        console.log(response);
+        if (response.content.length > 0) {
+          data.groupDataList = [...data.groupDataList, ...response.content];
+          data.groupParams.page += 1;
+        }
+      });
+    };
+    //选择群组
+    const groupCheck = (checked, event) => {
+      //给resultList填写数据
+      let name = event.target.name;
+      let value = event.target.value;
+      if (checked) {
+        data.resultList[data.tab]=[{name, value}];
+        data.checkList[data.tab]=[value];
+      } else {
+        data.resultList[data.tab] = data.resultList[data.tab].filter((item: any) => item.value !== value);
+        data.checkList[data.tab] = data.resultList[data.tab].filter((item: any) => item !== value);
+      }
+    };
     return () => (
       <div class="prefix-label-select-container">
         {props.prefixTitle && <div class="prefix-title ">{props.prefixTitle}</div>}
@@ -150,7 +187,7 @@ const PrefixLabelRule = defineComponent({
                       {data.userDataList?.map((item: any) => {
                         return (
                           <ElCheckbox label={item.id} name={item.nickName} onChange={userCheck}>
-                            {item.nickName}
+                            {item.nickName+'('+item.id+')'}
                           </ElCheckbox>
                         );
                       })}
@@ -190,7 +227,17 @@ const PrefixLabelRule = defineComponent({
               </ElCheckboxGroup>
             </ElTabPane> */}
                 <ElTabPane label="指定群组" name="GROUP">
-                  //TODO 群组数据待开发
+                  <div class="infinite-list" v-infinite-scroll={groupListload} style="height:200px;overflow:auto">
+                    <ElCheckboxGroup v-model={data.checkList.GROUP}>
+                      {data.groupDataList?.map((item: any) => {
+                        return (
+                          <ElCheckbox label={item.id} name={item.name} onChange={groupCheck}>
+                            {item.name}
+                          </ElCheckbox>
+                        );
+                      })}
+                    </ElCheckboxGroup>
+                  </div>
                 </ElTabPane>
               </>
             ) : null}

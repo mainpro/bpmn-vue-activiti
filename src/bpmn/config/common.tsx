@@ -111,10 +111,14 @@ const TYPE_OPTIONS = [
  */
 export const getElementTypeListenerProperties = function (options: {
   name: string;
+  type?:string;
   icon?: string;
   //时间类型选项
   eventOptions?: Array<{label: string; value: string}>;
 }): GroupProperties {
+  if(!options.type){
+    options.type="activiti:ExecutionListener"
+  }
   const eventOptions = options.eventOptions || EVENT_OPTIONS;
   return {
     name: options.name || '监听器',
@@ -179,7 +183,7 @@ export const getElementTypeListenerProperties = function (options: {
         },
         getValue: (businessObject: ModdleElement): Array<any> => {
           return businessObject?.extensionElements?.values
-            ?.filter((item: ModdleElement) => item.$type === 'activiti:ExecutionListener')
+            ?.filter((item: ModdleElement) => item.$type === options.type)
             ?.map((item: ModdleElement) => {
               const type = item.expression ? 'expression' : item.delegateExpression ? 'delegateExpression' : 'class';
               return {
@@ -193,9 +197,9 @@ export const getElementTypeListenerProperties = function (options: {
           const bpmnContext = BpmnStore;
           const moddle = bpmnContext.getModeler().get('moddle');
           bpmnContext.updateExtensionElements(
-            'activiti:ExecutionListener',
+            options.type||'activiti:ExecutionListener',
             value.map((attr: {event: string; type: string; content: string}) => {
-              return moddle.create(`activiti:ExecutionListener`, {
+              return moddle.create(options.type, {
                 event: attr.event,
                 [attr.type]: attr.content,
               });

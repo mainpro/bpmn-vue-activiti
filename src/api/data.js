@@ -36,3 +36,12 @@ export function getRuleResult(params) {
     data: params,
   });
 }
+
+//查询用户列表
+export function getGroup(params) {
+  return request({
+    url: 'api/actIdGroup',
+    method: 'get',
+    params: params,
+  });
+}
